@@ -58,7 +58,7 @@ const ResetPassword: React.FC = () => {
             <h2 className="text-2xl font-bold text-white text-center">重置密码</h2>
           </CardHeader>
           <CardContent className="pt-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="space-y-1">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">新密码</label>
                 <Input

@@ -50,52 +50,50 @@ if (typeof window !== 'undefined' && window.location.hash && window.location.has
 
 const App: React.FC = () => {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/categories/:tab" element={<Categories />} />
-              <Route path="/categories/:tab/:category" element={<Categories />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/messages" element={<Messages />} />
-              <Route path="/publish" element={<Publish />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/settings/profile/avatar" element={<AvatarSettings />} />
-              <Route path="/settings/profile/bio" element={<BioSettings />} />
-              <Route path="/settings/profile/gender" element={<GenderSettings />} />
-              <Route path="/settings/profile/birthday" element={<BirthdaySettings />} />
-              <Route path="/settings/profile/school" element={<SchoolSettings />} />
-              <Route path="/settings/address/shipping" element={<ShippingAddressSettings />} />
-              <Route path="/settings/address/return" element={<ReturnAddressSettings />} />
-              <Route path="/settings/account/password" element={<PasswordSettings />} />
-              <Route path="/settings/account/security" element={<SecurityCenter />} />
-              <Route path="/settings/account/email" element={<EmailSettings />} />
-              <Route path="/settings/account/device" element={<DeviceManagement />} />
-              <Route path="/settings/account/delete" element={<DeleteAccount />} />
-              <Route path="/settings/coffee/recharge" element={<Recharge />} />
-              <Route path="/settings/coffee/records" element={<Records />} />
-              <Route path="/settings/privacy" element={<PrivacySettings />} />
-              <Route path="/settings/notifications" element={<NotificationSettings />} />
-              <Route path="/settings/cache" element={<CacheSettings />} />
-              <Route path="/settings/about" element={<About />} />
-              <Route path="/settings/help" element={<HelpCenter />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/categories/:tab" element={<Categories />} />
+            <Route path="/categories/:tab/:category" element={<Categories />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/publish" element={<Publish />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/settings/profile/avatar" element={<AvatarSettings />} />
+            <Route path="/settings/profile/bio" element={<BioSettings />} />
+            <Route path="/settings/profile/gender" element={<GenderSettings />} />
+            <Route path="/settings/profile/birthday" element={<BirthdaySettings />} />
+            <Route path="/settings/profile/school" element={<SchoolSettings />} />
+            <Route path="/settings/address/shipping" element={<ShippingAddressSettings />} />
+            <Route path="/settings/address/return" element={<ReturnAddressSettings />} />
+            <Route path="/settings/account/password" element={<PasswordSettings />} />
+            <Route path="/settings/account/security" element={<SecurityCenter />} />
+            <Route path="/settings/account/email" element={<EmailSettings />} />
+            <Route path="/settings/account/device" element={<DeviceManagement />} />
+            <Route path="/settings/account/delete" element={<DeleteAccount />} />
+            <Route path="/settings/coffee/recharge" element={<Recharge />} />
+            <Route path="/settings/coffee/records" element={<Records />} />
+            <Route path="/settings/privacy" element={<PrivacySettings />} />
+            <Route path="/settings/notifications" element={<NotificationSettings />} />
+            <Route path="/settings/cache" element={<CacheSettings />} />
+            <Route path="/settings/about" element={<About />} />
+            <Route path="/settings/help" element={<HelpCenter />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 
