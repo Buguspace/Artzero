@@ -35,15 +35,15 @@ const FooterSection: React.FC = () => {
           <div className="flex space-x-4">
             {!user ? (
               <>
-                <Link to="/login" className="hover:text-artflow-pink transition-colors">
-                  登录
-                </Link>
-                <Link to="/register" className="hover:text-artflow-pink transition-colors">
-                  注册
-                </Link>
-                <Link to="/categories" className="hover:text-artflow-pink transition-colors">
-                  探索
-                </Link>
+            <Link to="/login" className="hover:text-artflow-pink transition-colors">
+              登录
+            </Link>
+            <Link to="/register" className="hover:text-artflow-pink transition-colors">
+              注册
+            </Link>
+            <Link to="/categories" className="hover:text-artflow-pink transition-colors">
+              探索
+            </Link>
               </>
             ) : (
               <button onClick={handleLogout} className="hover:text-artflow-pink transition-colors">

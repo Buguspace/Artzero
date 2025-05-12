@@ -40,11 +40,6 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
-  // 登录、注册、重置密码页面隐藏导航栏
-  if (["/login", "/register", "/reset-password"].includes(location.pathname)) {
-    return null;
-  }
-
   return (
     <header className="bg-white shadow-sm fixed w-full top-0 z-50">
       <div className="container mx-auto px-4">
@@ -159,16 +154,18 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Right Side: 登录/注册 or 菜单 */}
-          <div className="md:hidden flex items-center space-x-2 absolute right-4 top-4">
-            {!user ? (
+          <div className="md:hidden flex items-center space-x-2">
+            {(!user && location.pathname !== "/login" && location.pathname !== "/register") ? (
               <>
                 <Link to="/login" className="btn-primary px-3 py-1 text-sm">登录</Link>
                 <Link to="/register" className="btn-secondary px-3 py-1 text-sm">注册</Link>
               </>
             ) : (
-              <button onClick={toggleSideMenu} className="p-2">
-                {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+              user && (
+                <button onClick={toggleSideMenu} className="p-2">
+                  {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              )
             )}
           </div>
         </div>
