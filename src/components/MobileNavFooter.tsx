@@ -77,36 +77,19 @@ const MobileNavFooter: React.FC = () => {
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-        <div className="flex justify-around items-center h-14">
+        <div className="flex w-full">
           {navItems.map((item, index) => (
-            <React.Fragment key={index}>
-              {item.special ? (
-                <Link 
-                  to={item.path}
-                  className={cn(
-                    "flex flex-col items-center justify-center w-full py-1", 
-                    item.active ? "text-lowcarbonart-blue" : "text-gray-500"
-                  )}
-                >
-                  <div className="relative">
-                    <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-500 w-12 h-12 flex items-center justify-center rounded-b-full">
-                      <span className="text-white text-sm font-medium">{item.label}</span>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <button
-                  className={cn(
-                    "flex flex-col items-center flex-1 py-2",
-                    item.active ? "text-artflow-blue" : "text-gray-500"
-                  )}
-                  onClick={() => handleNavClick(item)}
-                >
-                  <item.icon size={20} />
-                  <span className="text-xs mt-1">{item.label}</span>
-                </button>
+            <button
+              key={item.label}
+              className={cn(
+                "flex flex-col items-center justify-center flex-1 py-2",
+                item.active ? "text-artflow-blue" : "text-gray-500"
               )}
-            </React.Fragment>
+              onClick={() => handleNavClick(item)}
+            >
+              {item.icon && <item.icon size={24} />}
+              <span className="text-xs mt-1 leading-none">{item.label}</span>
+            </button>
           ))}
         </div>
       </div>
