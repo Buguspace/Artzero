@@ -128,7 +128,7 @@ const Register: React.FC = () => {
           }
         } else if (data.user) {
           toast.success("注册成功！请查收验证邮件");
-          navigate("/login");
+          window.location.href = "/login";
         }
       } else {
         // 手机号注册
@@ -141,7 +141,7 @@ const Register: React.FC = () => {
           toast.error(error.message);
         } else if (data.user) {
           toast.success("注册成功！");
-          navigate("/");
+          window.location.href = "/";
         }
       }
     } catch (error) {

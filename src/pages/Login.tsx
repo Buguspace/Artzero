@@ -69,7 +69,7 @@ const Login: React.FC = () => {
           toast.error(error.message);
         } else if (data.user) {
           toast.success("登录成功！");
-          navigate("/");
+          window.location.href = "/";
         }
       } else {
         const { data, error } = await supabase.auth.verifyOtp({
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
           toast.error(error.message);
         } else if (data.user) {
           toast.success("登录成功！");
-          navigate("/");
+          window.location.href = "/";
         }
       }
     } catch (error) {

@@ -49,7 +49,7 @@ const ResetPassword: React.FC = () => {
         toast.error(error.message);
       } else {
         toast.success("密码重置成功，请重新登录");
-        navigate("/login");
+        window.location.href = "/login";
       }
     } catch (error) {
       toast.error("重置失败，请稍后再试");
