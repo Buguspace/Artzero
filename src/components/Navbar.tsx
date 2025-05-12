@@ -55,9 +55,11 @@ const Navbar: React.FC = () => {
             </Link>
             
             {/* Desktop Search Bar */}
-            <div className="hidden md:block flex-grow max-w-md mx-4">
-              <SearchBar />
-            </div>
+            {(location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/reset-password") && (
+              <div className="hidden md:block flex-grow max-w-md mx-4">
+                <SearchBar />
+              </div>
+            )}
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
@@ -149,9 +151,11 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Mobile Search Bar */}
-          <div className="md:hidden w-full pb-3 px-2">
-            <SearchBar />
-          </div>
+          {(location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/reset-password") && (
+            <div className="md:hidden w-full pb-3 px-2">
+              <SearchBar />
+            </div>
+          )}
 
           {/* Mobile Right Side: 登录/注册 or 菜单 */}
           <div className="md:hidden flex items-center space-x-2">
