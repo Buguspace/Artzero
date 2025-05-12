@@ -140,9 +140,11 @@ const Navbar: React.FC = () => {
             </nav>
 
             {/* Mobile Menu Button */}
-            <button onClick={toggleSideMenu} className="md:hidden p-2">
-              {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {!user ? null : (
+              <button onClick={toggleSideMenu} className="md:hidden p-2">
+                {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
           </div>
           
           {/* Mobile Search Bar */}

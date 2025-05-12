@@ -1,8 +1,22 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const FooterSection: React.FC = () => {
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    window.location.href = "/login";
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -19,15 +33,23 @@ const FooterSection: React.FC = () => {
           </div>
           
           <div className="flex space-x-4">
-            <Link to="/login" className="hover:text-artflow-pink transition-colors">
-              登录
-            </Link>
-            <Link to="/register" className="hover:text-artflow-pink transition-colors">
-              注册
-            </Link>
-            <Link to="/categories" className="hover:text-artflow-pink transition-colors">
-              探索
-            </Link>
+            {!user ? (
+              <>
+                <Link to="/login" className="hover:text-artflow-pink transition-colors">
+                  登录
+                </Link>
+                <Link to="/register" className="hover:text-artflow-pink transition-colors">
+                  注册
+                </Link>
+                <Link to="/categories" className="hover:text-artflow-pink transition-colors">
+                  探索
+                </Link>
+              </>
+            ) : (
+              <button onClick={handleLogout} className="hover:text-artflow-pink transition-colors">
+                登出/切换账号
+              </button>
+            )}
           </div>
         </div>
         
