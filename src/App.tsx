@@ -33,6 +33,8 @@ import CacheSettings from '@/pages/settings/cache/CacheSettings';
 import About from '@/pages/settings/about/About';
 import HelpCenter from '@/pages/settings/help/HelpCenter';
 import DeviceManagement from '@/pages/settings/account/DeviceManagement';
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ const App: React.FC = () => {
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/categories/:tab" element={<Categories />} />
