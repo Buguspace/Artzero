@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,15 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const query = useQuery();
   const accessToken = query.get("access_token");
+
+  useEffect(() => {
+    if (accessToken) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: accessToken,
+      });
+    }
+  }, [accessToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
