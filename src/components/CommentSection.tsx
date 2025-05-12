@@ -1,10 +1,11 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageSquare } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Comment {
   id: number;
@@ -22,8 +23,23 @@ interface CommentSectionProps {
 const CommentSection: React.FC<CommentSectionProps> = ({ productId, initialComments = [] }) => {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
 
   const handleSubmitComment = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     if (!newComment.trim()) {
       toast("评论内容不能为空", {
         description: "请输入评论内容后再提交"

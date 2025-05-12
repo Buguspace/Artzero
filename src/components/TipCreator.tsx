@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Coins, Heart } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 // 自定义咖啡杯SVG图标
 const CoffeeIcon = ({
@@ -28,9 +30,23 @@ const TipCreator: React.FC<TipCreatorProps> = ({
 }) => {
   const [beansCount, setBeansCount] = useState(initialBeans);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
   const tipAmounts = [5, 10, 20, 50];
 
   const handleSendTip = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     if (!selectedAmount) {
       toast("请选择打赏数量", {
         description: "选择一个咖啡豆数量来支持创作者"

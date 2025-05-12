@@ -151,6 +151,20 @@ const Navbar: React.FC = () => {
           <div className="md:hidden w-full pb-3 px-2">
             <SearchBar />
           </div>
+
+          {/* Mobile Right Side: 登录/注册 or 菜单 */}
+          <div className="md:hidden flex items-center space-x-2">
+            {!user ? (
+              <>
+                <Link to="/login" className="btn-primary px-3 py-1 text-sm">登录</Link>
+                <Link to="/register" className="btn-secondary px-3 py-1 text-sm">注册</Link>
+              </>
+            ) : (
+              <button onClick={toggleSideMenu} className="p-2">
+                {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

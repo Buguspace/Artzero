@@ -1,9 +1,10 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Share, Facebook, Twitter, MessageCircle, Send } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "@/components/ui/sonner";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SharePopoverProps {
   product: {
@@ -13,8 +14,21 @@ interface SharePopoverProps {
 }
 
 const SharePopover: React.FC<SharePopoverProps> = ({ product }) => {
+  const navigate = useNavigate();
+  const [user, setUser] = React.useState<any>(null);
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
   // Share product function
   const shareProduct = (platform: string) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     const productUrl = window.location.href;
     const productTitle = product.title;
     

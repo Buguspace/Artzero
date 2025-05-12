@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { CategoryItemType } from "@/pages/categories/CategoryItem";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FavoriteButtonProps {
   product: {
@@ -21,6 +22,16 @@ interface FavoriteButtonProps {
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
   
   useEffect(() => {
     const checkFavoriteStatus = () => {
@@ -46,6 +57,10 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ product }) => {
   }, [product.id]);
   
   const toggleFavorite = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     const savedFavorites = localStorage.getItem('userFavoriteItems');
     let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
     

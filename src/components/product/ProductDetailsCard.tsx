@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import ProductMetadata from "./ProductMetadata";
 import SharePopover from "./SharePopover";
 import FavoriteButton from "./FavoriteButton";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProductDetailsCardProps {
   product: {
@@ -28,11 +29,36 @@ interface ProductDetailsCardProps {
 
 const ProductDetailsCard: React.FC<ProductDetailsCardProps> = ({ product }) => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
   const isRental = product.category === 'rental';
   
   const handleContact = () => {
-    // 跳转到消息页面，并传递卖家信息
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     navigate(`/messages?chat=${product.author}`);
+  };
+  const handleFavorite = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      navigate('/login');
+      return;
+    }
+  };
+  const handleShare = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      navigate('/login');
+      return;
+    }
   };
   
   return (
@@ -86,8 +112,12 @@ const ProductDetailsCard: React.FC<ProductDetailsCardProps> = ({ product }) => {
           <Button className="flex-1" size="lg" onClick={handleContact}>
             {isRental ? "联系房东" : "联系卖家"}
           </Button>
-          <FavoriteButton product={product} />
-          <SharePopover product={product} />
+          <span onClick={handleFavorite}>
+            <FavoriteButton product={product} />
+          </span>
+          <span onClick={handleShare}>
+            <SharePopover product={product} />
+          </span>
         </div>
       </CardContent>
     </Card>
