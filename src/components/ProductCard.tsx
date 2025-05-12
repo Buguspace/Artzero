@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
@@ -12,6 +11,7 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "../hooks/use-mobile";
+import LazyImage from "./LazyImage";
 
 interface ProductCardProps {
   id: string;
@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <Link to={`/product/${id}`}>
         <CardHeader className="p-0">
           <AspectRatio ratio={4/3}>
-            <img
+            <LazyImage
               src={image}
               alt={title}
               className="w-full h-full object-cover"
@@ -75,4 +75,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

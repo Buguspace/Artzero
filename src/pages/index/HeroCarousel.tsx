@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Circle, CircleDot, ChevronLeft, ChevronRight } from "lucide-react";
 import {
@@ -9,6 +8,7 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import LazyImage from "@/components/LazyImage";
 
 const HeroCarousel: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -74,7 +74,7 @@ const HeroCarousel: React.FC = () => {
               <CarouselItem key={index}>
                 <div className="relative overflow-hidden rounded-lg">
                   <AspectRatio ratio={isMobile ? 16/9 : 1/1}>
-                    <img 
+                    <LazyImage 
                       src={image.src} 
                       alt={image.title} 
                       className="w-full h-full object-cover"
@@ -132,4 +132,4 @@ const HeroCarousel: React.FC = () => {
   );
 };
 
-export default HeroCarousel;
+export default React.memo(HeroCarousel);
