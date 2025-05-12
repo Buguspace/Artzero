@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, List, MessageSquare, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "../hooks/use-mobile";
 import UploadArtwork from "./UploadArtwork";
+import { supabase } from "@/integrations/supabase/client";
 
 const MobileNavFooter: React.FC = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const navigate = useNavigate();
   
   if (!isMobile) return null;
 
@@ -44,6 +46,15 @@ const MobileNavFooter: React.FC = () => {
       active: location.pathname === "/profile"
     }
   ];
+
+  const handleOpenUploadModal = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      navigate("/login");
+      return;
+    }
+    setIsUploadModalOpen(true);
+  };
 
   // Handle uploading artwork
   const handleUploadSuccess = (artwork: any) => {

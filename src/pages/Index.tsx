@@ -10,10 +10,22 @@ import FooterSection from "./index/FooterSection";
 import UploadArtwork from "../components/UploadArtwork";
 import { useIsMobile } from "../hooks/use-mobile";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const Index: React.FC = () => {
   const isMobile = useIsMobile();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const navigate = useNavigate();
+  
+  const handleOpenUploadModal = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      navigate("/login");
+      return;
+    }
+    setIsUploadModalOpen(true);
+  };
   
   const handleUploadSuccess = (artwork: any) => {
     // Add the new artwork to localStorage for persistence
@@ -31,7 +43,7 @@ const Index: React.FC = () => {
       
       {/* Hero Section */}
       <div className="pt-16 md:pt-24">
-        <HeroSection onUploadClick={() => setIsUploadModalOpen(true)} />
+        <HeroSection onUploadClick={handleOpenUploadModal} />
       </div>
       
       {/* Carousel Section - On mobile: between hero and products, On desktop: part of hero */}

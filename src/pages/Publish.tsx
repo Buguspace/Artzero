@@ -1,15 +1,25 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MobileNavFooter from "../components/MobileNavFooter";
 import { toast } from "sonner";
 import { ImageFile } from "@/components/ImageUploader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ArtworkForm, { ArtworkFormValues } from "@/components/artwork/ArtworkForm";
+import { supabase } from "@/integrations/supabase/client";
 
 const Publish: React.FC = () => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        navigate("/login");
+      }
+    });
+  }, [navigate]);
 
   const handleSubmit = (values: ArtworkFormValues, images: ImageFile[]) => {
     setIsUploading(true);

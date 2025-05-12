@@ -26,6 +26,7 @@ import {
   Trash2,
   LogOut,
 } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -83,7 +84,12 @@ const Profile: React.FC = () => {
     }));
   };
   
-  const openUploadModal = () => {
+  const openUploadModal = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      navigate("/login");
+      return;
+    }
     setIsUploadModalOpen(true);
   };
 

@@ -115,7 +115,13 @@ const Register: React.FC = () => {
           options: { data: { username: formData.username } },
         });
         if (error) {
-          if (error.message.includes('already registered') || error.message.includes('User already registered') || error.message.includes('duplicate key value')) {
+          if (
+            error.message.includes('already registered') ||
+            error.message.includes('User already registered') ||
+            error.message.includes('duplicate key value') ||
+            error.message.includes('邮箱已存在') ||
+            error.message.includes('Email rate limit exceeded')
+          ) {
             toast.error('该邮箱已注册，请直接登录');
           } else {
             toast.error(error.message);
