@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, LogIn, ChevronDown, Settings, User, Heart, Image, Book, Music, Video } from "lucide-react";
 import SideMenu from "./SideMenu";
@@ -13,14 +13,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar: React.FC = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener?.subscription.unsubscribe();
+  }, []);
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    navigate("/");
   };
 
   return (
@@ -44,92 +60,99 @@ const Navbar: React.FC = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              {/* 发现 Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center font-medium hover:text-artflow-blue transition-colors focus:outline-none">
-                  <span>发现</span>
-                  <ChevronDown className="ml-1" size={16} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-white">
-                  <DropdownMenuLabel>生活</DropdownMenuLabel>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/life/art" className="flex items-center">
-                      <Image size={16} className="mr-2 text-artflow-pink" />
-                      <span>艺术</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/life/books" className="flex items-center">
-                      <Book size={16} className="mr-2 text-artflow-pink" />
-                      <span>书籍</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/life/housing" className="flex items-center">
-                      <Image size={16} className="mr-2 text-artflow-pink" />
-                      <span>租房</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/life/jobs" className="flex items-center">
-                      <Image size={16} className="mr-2 text-artflow-pink" />
-                      <span>招聘</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>娱乐</DropdownMenuLabel>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/entertainment/music" className="flex items-center">
-                      <Music size={16} className="mr-2 text-artflow-yellow" />
-                      <span>音乐</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/entertainment/video" className="flex items-center">
-                      <Video size={16} className="mr-2 text-artflow-yellow" />
-                      <span>视频</span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {!user ? (
+                <>
+                  <Link to="/login" className="flex items-center space-x-1 font-medium hover:text-artflow-blue transition-colors">
+                    <LogIn size={18} />
+                    <span>登录</span>
+                  </Link>
+                  <Link to="/register" className="btn-primary">
+                    注册
+                  </Link>
+                </>
+              ) : (
+                <>
+                  {/* 发现 Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center font-medium hover:text-artflow-blue transition-colors focus:outline-none">
+                      <span>发现</span>
+                      <ChevronDown className="ml-1" size={16} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 bg-white">
+                      <DropdownMenuLabel>生活</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/life/art" className="flex items-center">
+                          <Image size={16} className="mr-2 text-artflow-pink" />
+                          <span>艺术</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/life/books" className="flex items-center">
+                          <Book size={16} className="mr-2 text-artflow-pink" />
+                          <span>书籍</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/life/housing" className="flex items-center">
+                          <Image size={16} className="mr-2 text-artflow-pink" />
+                          <span>租房</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/life/jobs" className="flex items-center">
+                          <Image size={16} className="mr-2 text-artflow-pink" />
+                          <span>招聘</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuSeparator />
+                      <DropdownMenuLabel>娱乐</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/entertainment/music" className="flex items-center">
+                          <Music size={16} className="mr-2 text-artflow-yellow" />
+                          <span>音乐</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/categories/entertainment/video" className="flex items-center">
+                          <Video size={16} className="mr-2 text-artflow-yellow" />
+                          <span>视频</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
-              {/* 我的空间 Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center font-medium hover:text-artflow-blue transition-colors focus:outline-none">
-                  <span>我的空间</span>
-                  <ChevronDown className="ml-1" size={16} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-white">
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile" className="flex items-center">
-                      <User size={16} className="mr-2" />
-                      <span>个人中心</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile#favorites" className="flex items-center">
-                      <Heart size={16} className="mr-2" />
-                      <span>我的收藏</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings" className="flex items-center">
-                      <Settings size={16} className="mr-2" />
-                      <span>设置</span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Link to="/login" className="flex items-center space-x-1 font-medium hover:text-artflow-blue transition-colors">
-                <LogIn size={18} />
-                <span>登录</span>
-              </Link>
-              <Link to="/register" className="btn-primary">
-                注册
-              </Link>
+                  {/* 我的空间 Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center font-medium hover:text-artflow-blue transition-colors focus:outline-none">
+                      <span>我的空间</span>
+                      <ChevronDown className="ml-1" size={16} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 bg-white">
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="flex items-center">
+                          <User size={16} className="mr-2" />
+                          <span>个人中心</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile#favorites" className="flex items-center">
+                          <Heart size={16} className="mr-2" />
+                          <span>我的收藏</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/settings" className="flex items-center">
+                          <Settings size={16} className="mr-2" />
+                          <span>设置</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <Button variant="ghost" onClick={handleLogout} className="ml-2">登出</Button>
+                </>
+              )}
             </nav>
 
             {/* Mobile Menu Button */}

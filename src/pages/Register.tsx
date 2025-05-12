@@ -115,7 +115,11 @@ const Register: React.FC = () => {
           options: { data: { username: formData.username } },
         });
         if (error) {
-          toast.error(error.message);
+          if (error.message.includes('already registered') || error.message.includes('User already registered') || error.message.includes('duplicate key value')) {
+            toast.error('该邮箱已注册，请直接登录');
+          } else {
+            toast.error(error.message);
+          }
         } else if (data.user) {
           toast.success("注册成功！请查收验证邮件");
           navigate("/login");
