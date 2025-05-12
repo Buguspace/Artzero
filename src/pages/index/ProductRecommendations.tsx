@@ -2,10 +2,13 @@ import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "../../components/ProductCard";
-import VirtualList from "../../components/VirtualList";
-import PullToRefresh from "../../components/PullToRefresh";
 import { useIsMobile } from "../../hooks/use-mobile";
 import { toast } from "sonner";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const ProductRecommendations: React.FC = () => {
   const isMobile = useIsMobile();
@@ -82,20 +85,6 @@ const ProductRecommendations: React.FC = () => {
     }
   }, []);
 
-  const renderProductCard = (product: typeof recommendedProducts[0], index: number) => (
-    <div className="p-2">
-      <ProductCard
-        key={product.id}
-        id={product.id}
-        image={product.image}
-        title={product.title}
-        price={product.price}
-        seller={product.seller}
-        likes={product.likes}
-      />
-    </div>
-  );
-
   return (
     <section className="py-12 md:py-16 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -107,21 +96,30 @@ const ProductRecommendations: React.FC = () => {
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <PullToRefresh
-            onRefresh={handleRefresh}
-            className="w-full"
-            pullDistance={isMobile ? 100 : 80}
-          >
-            <VirtualList
-              items={recommendedProducts}
-              height={isMobile ? 400 : 600}
-              itemHeight={isMobile ? 200 : 300}
-              renderItem={renderProductCard}
-              className="w-full"
-            />
-          </PullToRefresh>
-        </div>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {recommendedProducts.map((product) => (
+              <CarouselItem key={product.id} className="md:basis-1/4 lg:basis-1/4">
+                <div className="p-1">
+                  <ProductCard
+                    id={product.id}
+                    image={product.image}
+                    title={product.title}
+                    price={product.price}
+                    seller={product.seller}
+                    likes={product.likes}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   );
