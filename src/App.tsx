@@ -39,6 +39,15 @@ import ResetPassword from "./pages/ResetPassword";
 // Create a client
 const queryClient = new QueryClient();
 
+// Hash-to-query 跳转，兼容 Supabase 密码重置邮件链接
+if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token') && window.location.hash.includes('type=recovery')) {
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  const accessToken = params.get('access_token');
+  if (accessToken) {
+    window.location.replace(`/reset-password?access_token=${accessToken}`);
+  }
+}
+
 const App: React.FC = () => {
   return (
     <React.StrictMode>
