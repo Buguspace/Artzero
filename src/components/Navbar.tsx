@@ -79,13 +79,6 @@ const Navbar: React.FC = () => {
                       <ChevronDown className="ml-1" size={16} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 bg-white">
-                      <DropdownMenuLabel>生活</DropdownMenuLabel>
-                      <DropdownMenuItem asChild>
-                        <Link to="/categories/life/art" className="flex items-center">
-                          <Image size={16} className="mr-2 text-artflow-pink" />
-                          <span>艺术</span>
-                        </Link>
-                      </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link to="/categories/life/books" className="flex items-center">
                           <Book size={16} className="mr-2 text-artflow-pink" />
@@ -93,20 +86,11 @@ const Navbar: React.FC = () => {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link to="/categories/life/housing" className="flex items-center">
+                        <Link to="/categories/life/art" className="flex items-center">
                           <Image size={16} className="mr-2 text-artflow-pink" />
-                          <span>租房</span>
+                          <span>艺术</span>
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/categories/life/jobs" className="flex items-center">
-                          <Image size={16} className="mr-2 text-artflow-pink" />
-                          <span>招聘</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      
-                      <DropdownMenuSeparator />
-                      <DropdownMenuLabel>娱乐</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link to="/categories/entertainment/music" className="flex items-center">
                           <Music size={16} className="mr-2 text-artflow-yellow" />

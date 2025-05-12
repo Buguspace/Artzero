@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Publish: React.FC = () => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,8 +19,11 @@ const Publish: React.FC = () => {
       if (!data.user) {
         navigate("/login");
       }
+      setLoading(false);
     });
   }, [navigate]);
+
+  if (loading) return null;
 
   const handleSubmit = (values: ArtworkFormValues, images: ImageFile[]) => {
     setIsUploading(true);

@@ -30,23 +30,24 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-
-  // Simulate a logged in user
-  const [user, setUser] = useState({
-    username: "艺术家用户",
-    bio: "热爱艺术，喜欢创作的艺术爱好者。",
-    email: "artist@example.com",
-    coffeeBean: 125,
-    joinDate: "2023-01-15",
-    gender: "",
-    birthday: undefined as Date | undefined,
-    school: "",
-  });
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [userArtworks, setUserArtworks] = useState<Artwork[]>([]);
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [activeTab, setActiveTab] = useState<string>("creations");
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        navigate("/login");
+      } else {
+        setUser(data.user);
+      }
+      setLoading(false);
+    });
+  }, [navigate]);
 
   // Listen for coffee bean updates
   useEffect(() => {
@@ -176,6 +177,8 @@ const Profile: React.FC = () => {
       ],
     },
   ];
+
+  if (loading || !user) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-14 md:pb-0">
