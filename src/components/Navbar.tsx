@@ -160,13 +160,7 @@ const Navbar: React.FC = () => {
                 <Link to="/login" className="btn-primary px-3 py-1 text-sm">登录</Link>
                 <Link to="/register" className="btn-secondary px-3 py-1 text-sm">注册</Link>
               </>
-            ) : (
-              user && (
-                <button onClick={toggleSideMenu} className="p-2">
-                  {isSideMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              )
-            )}
+            ) : null}
           </div>
         </div>
       </div>
