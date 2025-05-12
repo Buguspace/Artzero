@@ -66,6 +66,14 @@ const MobileNavFooter: React.FC = () => {
     setIsUploadModalOpen(false);
   };
 
+  const handleNavClick = async (item: any) => {
+    if ((item.path === "/messages" || item.path === "/profile") && !(await supabase.auth.getUser()).data.user) {
+      navigate("/login");
+      return;
+    }
+    navigate(item.path);
+  };
+
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
@@ -87,16 +95,16 @@ const MobileNavFooter: React.FC = () => {
                   </div>
                 </Link>
               ) : (
-                <Link 
-                  to={item.path}
+                <button
                   className={cn(
-                    "flex flex-col items-center justify-center w-full py-1", 
-                    item.active ? "text-lowcarbonart-blue" : "text-gray-500"
+                    "flex flex-col items-center flex-1 py-2",
+                    item.active ? "text-artflow-blue" : "text-gray-500"
                   )}
+                  onClick={() => handleNavClick(item)}
                 >
                   <item.icon size={20} />
                   <span className="text-xs mt-1">{item.label}</span>
-                </Link>
+                </button>
               )}
             </React.Fragment>
           ))}

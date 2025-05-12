@@ -153,7 +153,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Right Side: 登录/注册 or 菜单 */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="md:hidden flex items-center space-x-2 absolute right-4 top-4">
             {!user ? (
               <>
                 <Link to="/login" className="btn-primary px-3 py-1 text-sm">登录</Link>
