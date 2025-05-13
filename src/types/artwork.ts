@@ -1,4 +1,3 @@
-
 export interface Artwork {
   id: number;
   title: string;
@@ -9,4 +8,5 @@ export interface Artwork {
   imageUrls: string[];
   publishDate: string;
   beansCount: number;
+  author: string;
 }

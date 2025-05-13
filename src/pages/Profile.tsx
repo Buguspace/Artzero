@@ -151,6 +151,14 @@ const Profile: React.FC = () => {
     };
   }, []);
 
+  // 在 Profile 组件中增加删除作品的处理函数
+  const handleDeleteArtwork = (id: number) => {
+    const existingArtworks = JSON.parse(localStorage.getItem('userArtworks') || '[]');
+    const updatedArtworks = existingArtworks.filter((artwork: Artwork) => artwork.id !== id);
+    localStorage.setItem('userArtworks', JSON.stringify(updatedArtworks));
+    setUserArtworks(updatedArtworks);
+  };
+
   const sections = [
     {
       title: "个人资料",
@@ -215,7 +223,7 @@ const Profile: React.FC = () => {
               </div>
               
               <TabsContent value="creations">
-                <ArtworkGrid artworks={userArtworks} />
+                <ArtworkGrid artworks={userArtworks} onDeleteArtwork={handleDeleteArtwork} />
               </TabsContent>
               
               <TabsContent value="favorites">
