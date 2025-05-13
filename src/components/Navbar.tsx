@@ -19,13 +19,31 @@ const Navbar: React.FC = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(() => {
+    // 尝试同步读取 localStorage
+    const cached = localStorage.getItem('currentUser');
+    return cached ? JSON.parse(cached) : null;
+  });
   const location = useLocation();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        setUser(data.user);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+      } else {
+        setUser(null);
+        localStorage.removeItem('currentUser');
+      }
+    });
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
+      if (session?.user) {
+        setUser(session.user);
+        localStorage.setItem('currentUser', JSON.stringify(session.user));
+      } else {
+        setUser(null);
+        localStorage.removeItem('currentUser');
+      }
     });
     return () => listener?.subscription.unsubscribe();
   }, []);
