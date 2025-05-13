@@ -5,12 +5,16 @@ import { Button } from '@/components/ui/button';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FavoriteButton from '@/components/FavoriteButton';
+import EmptyState from '@/pages/profile/EmptyState';
 
 interface ArtworkGridProps {
   artworks: Artwork[];
 }
 
 const ArtworkGrid: React.FC<ArtworkGridProps> = ({ artworks }) => {
+  if (!artworks || artworks.length === 0) {
+    return <EmptyState title="暂无创作" description="快去发布你的第一件作品吧！" />;
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {artworks.map((artwork) => (

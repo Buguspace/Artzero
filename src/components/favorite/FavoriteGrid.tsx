@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, MessageCircle, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import EmptyState from '@/pages/profile/EmptyState';
 
 interface FavoriteGridProps {
   favorites: FavoriteItem[];
@@ -11,6 +12,9 @@ interface FavoriteGridProps {
 }
 
 const FavoriteGrid: React.FC<FavoriteGridProps> = ({ favorites, onRemove }) => {
+  if (!favorites || favorites.length === 0) {
+    return <EmptyState title="暂无收藏" description="快去发现并收藏你喜欢的作品吧！" />;
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {favorites.map((item) => (

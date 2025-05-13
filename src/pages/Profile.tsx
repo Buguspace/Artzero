@@ -27,10 +27,14 @@ import {
   LogOut,
 } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
+import SkeletonProfile from "./profile/SkeletonProfile";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(() => {
+    const cached = localStorage.getItem('currentUser');
+    return cached ? JSON.parse(cached) : null;
+  });
   const [loading, setLoading] = useState(true);
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -42,8 +46,11 @@ const Profile: React.FC = () => {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
         navigate("/login");
+        setUser(null);
+        localStorage.removeItem('currentUser');
       } else {
         setUser(data.user);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
       }
       setLoading(false);
     });
@@ -178,7 +185,8 @@ const Profile: React.FC = () => {
     },
   ];
 
-  if (loading || !user) return null;
+  if (loading) return <SkeletonProfile />;
+  if (!user) { navigate('/login'); return null; }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-14 md:pb-0">
