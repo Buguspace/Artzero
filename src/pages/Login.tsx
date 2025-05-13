@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight, Phone } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -8,9 +8,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoadingContext } from "@/App";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { setLoading } = useContext(LoadingContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginType, setLoginType] = useState<"email" | "phone">("email");
@@ -57,7 +59,7 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    setLoading(true);
     try {
       if (loginType === "email") {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -90,10 +92,12 @@ const Login: React.FC = () => {
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const handleSocialLogin = async (provider: 'google' | 'github' | 'facebook') => {
+    setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
@@ -108,6 +112,8 @@ const Login: React.FC = () => {
     } catch (error) {
       toast.error(`${provider} 登录时发生错误`);
       console.error("Social login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

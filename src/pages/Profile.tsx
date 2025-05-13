@@ -28,14 +28,16 @@ import {
 } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import SkeletonProfile from "./profile/SkeletonProfile";
+import { useContext } from "react";
+import { LoadingContext } from "@/App";
 
 const Profile: React.FC = () => {
+  const { setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(() => {
     const cached = localStorage.getItem('currentUser');
     return cached ? JSON.parse(cached) : null;
   });
-  const [loading, setLoading] = useState(true);
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [userArtworks, setUserArtworks] = useState<Artwork[]>([]);
@@ -43,6 +45,7 @@ const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("creations");
 
   useEffect(() => {
+    setLoading(true);
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
         navigate("/login");

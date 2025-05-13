@@ -7,23 +7,23 @@ import { ImageFile } from "@/components/ImageUploader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ArtworkForm, { ArtworkFormValues } from "@/components/artwork/ArtworkForm";
 import { supabase } from "@/integrations/supabase/client";
+import { useContext } from "react";
+import { LoadingContext } from "@/App";
 
 const Publish: React.FC = () => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
         navigate("/login");
       }
-      setLoading(false);
     });
   }, [navigate]);
-
-  if (loading) return null;
 
   const handleSubmit = (values: ArtworkFormValues, images: ImageFile[]) => {
     setIsUploading(true);

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -14,6 +13,7 @@ import { ImageFile } from "./ImageUploader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Artwork } from "@/types/artwork";
 import ArtworkForm, { ArtworkFormValues } from "./artwork/ArtworkForm";
+import { useNavigate } from 'react-router-dom';
 
 interface UploadArtworkProps {
   isOpen: boolean;
@@ -28,6 +28,7 @@ const UploadArtwork: React.FC<UploadArtworkProps> = ({
 }) => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
   
   const handleSubmit = async (values: ArtworkFormValues, images: ImageFile[]) => {
     setIsUploading(true);
@@ -54,6 +55,7 @@ const UploadArtwork: React.FC<UploadArtworkProps> = ({
         imageUrls: imagePreviews, // All image URLs
         publishDate: new Date().toISOString(),
         beansCount: Math.floor(Math.random() * 20) + 30, // Random beans count between 30-50
+        author: "当前用户", // 补充 author 字段
       };
 
       toast.success("作品上传成功", {
@@ -68,6 +70,8 @@ const UploadArtwork: React.FC<UploadArtworkProps> = ({
       
       // Close modal
       onClose();
+      // 新增：发布成功后跳转到个人中心
+      navigate('/profile');
     } catch (error) {
       console.error("Upload error:", error);
       toast.error("上传失败", {

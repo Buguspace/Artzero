@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -12,13 +11,15 @@ import ProductDescriptionCard from "@/components/product/ProductDescriptionCard"
 import CommentsCard from "@/components/product/CommentsCard";
 import { productsData, mockComments } from "@/data/productsData";
 import { Artwork } from "@/types/artwork";
+import { LoadingContext } from "@/App";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { setLoading } = useContext(LoadingContext);
   const [product, setProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    setLoading(true);
     if (id) {
       // First check if it's one of the mock products
       const mockProduct = productsData[id as keyof typeof productsData];
@@ -57,19 +58,6 @@ const ProductDetail: React.FC = () => {
       setLoading(false);
     }
   }, [id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="container mx-auto pt-24 pb-12 px-4">
-          <div className="text-center">
-            <p className="mt-4">加载中...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!product) {
     return (
