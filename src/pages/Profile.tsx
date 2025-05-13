@@ -196,7 +196,6 @@ const Profile: React.FC = () => {
     },
   ];
 
-  if (loading) return <SkeletonProfile />;
   if (!user) { navigate('/login'); return null; }
 
   return (
