@@ -8,10 +8,10 @@ import { Artwork } from "@/types/artwork";
 import { FavoriteItem } from "@/types/favorite";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, ArrowRight } from "lucide-react";
 import ArtworkGrid from "@/components/artwork/ArtworkGrid";
 import FavoriteGrid from "@/components/favorite/FavoriteGrid";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   User,
@@ -30,10 +30,13 @@ import { supabase } from "@/integrations/supabase/client";
 import SkeletonProfile from "./profile/SkeletonProfile";
 import { useContext } from "react";
 import { LoadingContext } from "@/App";
+import { useLoadingService } from "@/hooks/useLoadingService";
 
 const Profile: React.FC = () => {
-  const { setLoading } = useContext(LoadingContext);
+  const { loading, showLoading, hideLoading } = useLoadingService();
+  const location = useLocation();
   const navigate = useNavigate();
+  const { setLoading } = useContext(LoadingContext);
   const [user, setUser] = useState<any>(() => {
     const cached = localStorage.getItem('currentUser');
     return cached ? JSON.parse(cached) : null;
@@ -45,7 +48,7 @@ const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("creations");
 
   useEffect(() => {
-    setLoading(true);
+    showLoading();
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
         navigate("/login");
@@ -55,9 +58,11 @@ const Profile: React.FC = () => {
         setUser(data.user);
         localStorage.setItem('currentUser', JSON.stringify(data.user));
       }
-      setLoading(false);
+      hideLoading();
     });
-  }, [navigate]);
+    // 路由切换时关闭 loading
+    return () => hideLoading();
+  }, [location]);
 
   // Listen for coffee bean updates
   useEffect(() => {
@@ -208,8 +213,12 @@ const Profile: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-14 md:pb-0">
       <Navbar />
-
-      <div className="container mx-auto pt-24 pb-12 px-4">
+      <div className="container mx-auto pt-24 pb-12 px-4 relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+            <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
+          </div>
+        )}
         <div className="max-w-3xl mx-auto">
           {/* Profile Header */}
           <ProfileHeader user={user} onUpdateUser={handleUpdateUser} />
@@ -224,10 +233,13 @@ const Profile: React.FC = () => {
                 </TabsList>
                 
                 {activeTab === "creations" && (
-                  <Button onClick={openUploadModal}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    发布新作品
-                  </Button>
+                  <button 
+                    onClick={() => window.location.href = 'https://cc.artzero.ip-ddns.com/publish'}
+                    className="btn-primary flex items-center"
+                  >
+                    <span>发布新作品</span>
+                    <ArrowRight size={18} className="ml-2" />
+                  </button>
                 )}
               </div>
               

@@ -28,7 +28,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onUploadClick }) => {
             
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
               <button 
-                onClick={onUploadClick}
+                onClick={() => window.location.href = 'https://cc.artzero.ip-ddns.com/publish'}
                 className="btn-primary flex items-center"
               >
                 <span>上传作品</span>
