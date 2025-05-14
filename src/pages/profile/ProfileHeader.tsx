@@ -26,6 +26,7 @@ interface ProfileHeaderProps {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onUpdateUser }) => {
   const [editMode, setEditMode] = useState(false);
+  const [userData, setUserData] = useState(user);
 
   const handleSave = (data: {
     username: string;
@@ -43,18 +44,29 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onUpdateUser }) => 
     setEditMode(false);
   };
 
+  const handleImageChange = (file: File) => {
+    // Update user data with new avatar
+    const reader = new FileReader();
+    reader.onload = () => {
+      const avatarUrl = reader.result as string;
+      // Update user data
+      setUserData(prev => ({ ...prev, avatar: avatarUrl }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
       <div className="h-32 bg-gradient-to-r from-artflow-blue to-artflow-pink"></div>
 
       <div className="relative px-6 pb-6">
         <div className="-mt-16 mb-6">
-          <AvatarUpload />
+          <AvatarUpload onImageChange={handleImageChange} />
         </div>
 
         {editMode ? (
           <ProfileEditForm 
-            initialData={user}
+            initialData={userData}
             onSave={handleSave}
             onCancel={handleCancel}
           />
@@ -62,8 +74,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onUpdateUser }) => 
           <>
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-2xl font-bold">{user.username}</h1>
-                <p className="text-gray-600 mt-1">{user.bio}</p>
+                <h1 className="text-2xl font-bold">{userData.username}</h1>
+                <p className="text-gray-600 mt-1">{userData.bio}</p>
               </div>
               <button
                 onClick={() => setEditMode(true)}
@@ -76,20 +88,20 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onUpdateUser }) => 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
               <div>
                 <p className="text-gray-500">电子邮箱</p>
-                <p className="font-medium">{user.email}</p>
+                <p className="font-medium">{userData.email}</p>
               </div>
               <div>
                 <p className="text-gray-500">咖啡豆</p>
-                <p className="font-medium">{user.coffeeBean}</p>
+                <p className="font-medium">{userData.coffeeBean}</p>
               </div>
               <div>
                 <p className="text-gray-500">加入日期</p>
-                <p className="font-medium">{user.joinDate}</p>
+                <p className="font-medium">{userData.joinDate}</p>
               </div>
-              {user.school && (
+              {userData.school && (
                 <div>
                   <p className="text-gray-500">学校</p>
-                  <p className="font-medium">{user.school}</p>
+                  <p className="font-medium">{userData.school}</p>
                 </div>
               )}
             </div>

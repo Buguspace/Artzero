@@ -24,7 +24,10 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
     // Create preview
     const reader = new FileReader();
     reader.onload = () => {
-      setPreview(reader.result as string);
+      const previewUrl = reader.result as string;
+      setPreview(previewUrl);
+      // Save to localStorage
+      localStorage.setItem('userAvatar', previewUrl);
     };
     reader.readAsDataURL(file);
 
