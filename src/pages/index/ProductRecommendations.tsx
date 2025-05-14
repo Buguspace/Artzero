@@ -89,7 +89,7 @@ const ProductRecommendations: React.FC = () => {
     <section className="py-12 md:py-16 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">优品浏览</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">优品浏览</h2>
           <Link to="/categories" className="text-lowcarbonart-blue hover:underline flex items-center">
             查看更多
             <ArrowRight size={16} className="ml-1" />
