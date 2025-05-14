@@ -21,8 +21,8 @@ const FooterSection: React.FC = () => {
     <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0">
-            <div className="flex items-center space-x-2">
+          <div className="mb-6 md:mb-0 text-center md:text-left">
+            <div className="flex items-center space-x-2 justify-center md:justify-start">
               <div className="w-8 h-8 relative">
                 <div className="absolute top-0 left-0 w-8 h-8 bg-artflow-pink rounded-full opacity-50"></div>
                 <div className="absolute bottom-0 right-0 w-6 h-6 bg-artflow-blue rounded-full"></div>

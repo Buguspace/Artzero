@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Upload, Heart, Image } from "lucide-react";
 
@@ -9,7 +8,7 @@ const FeaturesSection: React.FC = () => {
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">特色功能</h2>
         
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="card-stylish">
+          <div className="card-stylish text-center md:text-left">
             <div className="text-LowCarbon Art-blue mb-4">
               <Upload size={32} />
             </div>
@@ -19,7 +18,7 @@ const FeaturesSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="card-stylish">
+          <div className="card-stylish text-center md:text-left">
             <div className="text-artflow-pink mb-4">
               <Heart size={32} />
             </div>
@@ -29,7 +28,7 @@ const FeaturesSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="card-stylish">
+          <div className="card-stylish text-center md:text-left">
             <div className="text-artflow-yellow mb-4">
               <Image size={32} />
             </div>
