@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import MobileNavFooter from '@/components/MobileNavFooter';
 import {
-  User,
   Lock,
   Mail,
   MapPin,
@@ -16,6 +15,7 @@ import {
   Settings,
   Trash2,
   LogOut,
+  ChevronRight,
 } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
@@ -23,39 +23,8 @@ const SettingsPage: React.FC = () => {
 
   const sections = [
     {
-      title: '个人资料',
-      icon: <User className="h-5 w-5" />,
-      items: [
-        {
-          title: '头像设置',
-          description: '更换您的个人头像',
-          path: '/settings/profile/avatar',
-        },
-        {
-          title: '个人简介',
-          description: '编辑您的个人介绍',
-          path: '/settings/profile/bio',
-        },
-        {
-          title: '性别设置',
-          description: '设置您的性别信息',
-          path: '/settings/profile/gender',
-        },
-        {
-          title: '生日设置',
-          description: '设置您的出生日期',
-          path: '/settings/profile/birthday',
-        },
-        {
-          title: '学校设置',
-          description: '设置您的学校信息',
-          path: '/settings/profile/school',
-        },
-      ],
-    },
-    {
       title: '账号安全',
-      icon: <Shield className="h-5 w-5" />,
+      icon: <Lock className="h-5 w-5" />,
       items: [
         {
           title: '修改密码',
@@ -64,23 +33,8 @@ const SettingsPage: React.FC = () => {
         },
         {
           title: '安全中心',
-          description: '管理账号安全设置',
+          description: '管理账号安全',
           path: '/settings/account/security',
-        },
-        {
-          title: '绑定邮箱',
-          description: '设置或更换绑定邮箱',
-          path: '/settings/account/email',
-        },
-        {
-          title: '设备管理',
-          description: '管理已登录设备',
-          path: '/settings/account/device',
-        },
-        {
-          title: '注销账号',
-          description: '永久删除您的账号',
-          path: '/settings/account/delete',
         },
       ],
     },
@@ -95,7 +49,7 @@ const SettingsPage: React.FC = () => {
         },
         {
           title: '退货地址',
-          description: '管理您的退货地址',
+          description: '管理退货地址',
           path: '/settings/address/return',
         },
       ],
@@ -105,113 +59,87 @@ const SettingsPage: React.FC = () => {
       icon: <Coffee className="h-5 w-5" />,
       items: [
         {
-          title: '充值中心',
-          description: '为您的账号充值咖啡豆',
+          title: '充值',
+          description: '充值咖啡豆',
           path: '/settings/coffee/recharge',
         },
         {
-          title: '消费记录',
-          description: '查看咖啡豆使用记录',
+          title: '交易记录',
+          description: '查看咖啡豆收支明细',
           path: '/settings/coffee/records',
         },
       ],
     },
     {
-      title: '隐私与通知',
+      title: '通知设置',
       icon: <Bell className="h-5 w-5" />,
       items: [
         {
-          title: '隐私设置',
-          description: '管理您的隐私选项',
-          path: '/settings/privacy',
-        },
-        {
-          title: '通知设置',
-          description: '设置消息通知方式',
+          title: '通知偏好',
+          description: '设置通知接收方式',
           path: '/settings/notifications',
         },
       ],
     },
     {
-      title: '其他设置',
-      icon: <Settings className="h-5 w-5" />,
+      title: '隐私设置',
+      icon: <Shield className="h-5 w-5" />,
       items: [
         {
-          title: '缓存管理',
-          description: '清理应用缓存数据',
-          path: '/settings/cache',
-        },
-        {
-          title: '关于我们',
-          description: '了解平台更多信息',
-          path: '/settings/about',
-        },
-        {
-          title: '帮助中心',
-          description: '获取使用帮助',
-          path: '/settings/help',
+          title: '隐私选项',
+          description: '管理您的隐私设置',
+          path: '/settings/privacy',
         },
       ],
     },
     {
-      title: '退出登录',
-      icon: <LogOut className="h-5 w-5 text-red-500" />,
+      title: '帮助中心',
+      icon: <HelpCircle className="h-5 w-5" />,
       items: [
         {
-          title: '退出登录',
-          description: '退出当前账号并返回登录页面',
-          path: '/login',
-          onClick: () => {
-            // 清除登录状态
-            localStorage.removeItem('token');
-            // 跳转到登录页
-            navigate('/login');
-          }
+          title: '常见问题',
+          description: '查看常见问题解答',
+          path: '/help/faqs',
+        },
+        {
+          title: '联系客服',
+          description: '获取帮助和支持',
+          path: '/help/contact',
         },
       ],
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-14 md:pb-0">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-
-      <div className="container mx-auto pt-24 pb-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">设置</h1>
-            <p className="text-gray-500">管理您的账号和设置</p>
-          </div>
-
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-bold mb-6">设置</h1>
+          
           <div className="space-y-6">
-            {sections.map((section, sectionIndex) => (
-              <Card key={sectionIndex} className="border-none shadow-sm">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      {section.icon}
-                    </div>
-                    <CardTitle className="text-lg">{section.title}</CardTitle>
+            {sections.map((section, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    {section.icon}
+                    <CardTitle>{section.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-3">
+                  <div className="space-y-4">
                     {section.items.map((item, itemIndex) => (
                       <div
                         key={itemIndex}
-                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                        onClick={() => navigate(item.path)}
                       >
                         <div>
-                          <h3 className="font-medium text-sm">{item.title}</h3>
-                          <p className="text-xs text-gray-500">{item.description}</p>
+                          <h3 className="font-medium">{item.title}</h3>
+                          <CardDescription>{item.description}</CardDescription>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={item.onClick || (() => navigate(item.path))}
-                          className="h-8"
-                        >
-                          去设置
+                        <Button variant="ghost" size="icon">
+                          <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
                     ))}
@@ -222,7 +150,6 @@ const SettingsPage: React.FC = () => {
           </div>
         </div>
       </div>
-
       <MobileNavFooter />
     </div>
   );
