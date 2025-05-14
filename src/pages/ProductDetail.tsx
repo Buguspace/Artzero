@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
 import TipCreator from "@/components/TipCreator";
@@ -12,21 +12,23 @@ import CommentsCard from "@/components/product/CommentsCard";
 import { productsData, mockComments } from "@/data/productsData";
 import { Artwork } from "@/types/artwork";
 import { LoadingContext } from "@/App";
+import { useLoadingService } from "@/hooks/useLoadingService";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { setLoading } = useContext(LoadingContext);
+  const { loading, showLoading, hideLoading } = useLoadingService();
+  const location = useLocation();
   const [product, setProduct] = useState<any>(null);
   
   useEffect(() => {
-    setLoading(true);
+    showLoading();
     if (id) {
       // First check if it's one of the mock products
       const mockProduct = productsData[id as keyof typeof productsData];
       
       if (mockProduct) {
         setProduct(mockProduct);
-        setLoading(false);
+        hideLoading();
         return;
       }
       
@@ -55,15 +57,21 @@ const ProductDetail: React.FC = () => {
         }
       }
       
-      setLoading(false);
+      hideLoading();
     }
-  }, [id]);
+    return () => hideLoading();
+  }, [id, location]);
 
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <div className="container mx-auto pt-24 pb-12 px-4">
+        <div className="container mx-auto pt-24 pb-12 px-4 relative">
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+              <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
+            </div>
+          )}
           <div className="text-center">
             <h1 className="text-2xl font-bold">商品不存在</h1>
             <p className="mt-4">
@@ -88,7 +96,12 @@ const ProductDetail: React.FC = () => {
     <div className="min-h-screen pb-14 md:pb-0">
       <Navbar />
 
-      <div className="container mx-auto pt-24 pb-12 px-4">
+      <div className="container mx-auto pt-24 pb-12 px-4 relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+            <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
+          </div>
+        )}
         <div className="max-w-5xl mx-auto">
           {/* Back Navigation */}
           <Link

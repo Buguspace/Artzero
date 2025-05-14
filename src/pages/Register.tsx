@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLoadingService } from "@/hooks/useLoadingService";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { loading, showLoading, hideLoading } = useLoadingService();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [registerType, setRegisterType] = useState<'email' | 'phone'>('email');
@@ -25,6 +28,14 @@ const Register: React.FC = () => {
   const [codeCooldown, setCodeCooldown] = useState(0);
   const [passwordStrength, setPasswordStrength] = useState('');
   const [agree, setAgree] = useState(false);
+
+  useEffect(() => {
+    showLoading();
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
+    return () => hideLoading();
+  }, [location]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -170,7 +181,12 @@ const Register: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto pt-24 pb-12 px-4">
+      <div className="container mx-auto pt-24 pb-12 px-4 relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+            <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
+          </div>
+        )}
         <Card className="max-w-md mx-auto">
           <CardHeader className="bg-gradient-to-r from-artflow-blue to-artflow-pink py-4">
             <h2 className="text-2xl font-bold text-white text-center">创建账户</h2>
