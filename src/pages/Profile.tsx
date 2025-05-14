@@ -96,12 +96,19 @@ const Profile: React.FC = () => {
   };
   
   const openUploadModal = async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) {
-      navigate("/login");
-      return;
+    setLoading(true);
+    try {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) {
+        navigate("/login");
+        return;
+      }
+      setIsUploadModalOpen(true);
+    } catch (e) {
+      console.error('openUploadModal error:', e);
+    } finally {
+      setLoading(false);
     }
-    setIsUploadModalOpen(true);
   };
 
   const handleUploadSuccess = (artwork: Artwork) => {
