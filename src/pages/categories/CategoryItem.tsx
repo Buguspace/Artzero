@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -94,6 +93,16 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           >
             查看详情
           </Link>
+        </div>
+        
+        {/* Show seller avatar */}
+        <div className="flex items-center mt-2">
+          <img
+            src={localStorage.getItem('userAvatar') || '/placeholder.svg'}
+            alt="Seller Avatar"
+            className="w-6 h-6 rounded-full mr-2"
+          />
+          <span className="text-xs text-gray-500">{item.author}</span>
         </div>
       </div>
     </div>

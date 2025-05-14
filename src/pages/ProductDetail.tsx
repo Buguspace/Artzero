@@ -128,7 +128,7 @@ const ProductDetail: React.FC = () => {
               {/* Seller Information */}
               <SellerInfoCard 
                 author={product.author} 
-                authorAvatar={product.authorAvatar} 
+                authorAvatar={localStorage.getItem('userAvatar') || product.authorAvatar} 
               />
 
               {/* Tipping Component */}
