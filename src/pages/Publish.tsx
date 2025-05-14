@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MobileNavFooter from "../components/MobileNavFooter";
 import { toast } from "sonner";
@@ -9,21 +9,25 @@ import ArtworkForm, { ArtworkFormValues } from "@/components/artwork/ArtworkForm
 import { supabase } from "@/integrations/supabase/client";
 import { useContext } from "react";
 import { LoadingContext } from "@/App";
+import { useLoadingService } from "@/hooks/useLoadingService";
 
 const Publish: React.FC = () => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const { setLoading } = useContext(LoadingContext);
+  const { loading, showLoading, hideLoading } = useLoadingService();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
+    showLoading();
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
         navigate("/login");
       }
+      hideLoading();
     });
-  }, [navigate]);
+    return () => hideLoading();
+  }, [location, navigate]);
 
   const handleSubmit = (values: ArtworkFormValues, images: ImageFile[]) => {
     setIsUploading(true);
@@ -93,7 +97,12 @@ const Publish: React.FC = () => {
     <div className="min-h-screen pb-20 md:pb-0">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-6 pb-20">
+      <div className="container mx-auto px-4 py-6 pb-20 relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+            <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
+          </div>
+        )}
         <h1 className="text-2xl font-bold mb-6">发布作品</h1>
         
         <ScrollArea className="h-full">

@@ -11,12 +11,24 @@ import UploadArtwork from "../components/UploadArtwork";
 import { useIsMobile } from "../hooks/use-mobile";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useLoadingService } from "@/hooks/useLoadingService";
 
 const Index: React.FC = () => {
   const isMobile = useIsMobile();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { loading, showLoading, hideLoading } = useLoadingService();
+  const location = useLocation();
+  
+  useEffect(() => {
+    showLoading();
+    // 模拟首页数据加载
+    setTimeout(() => {
+      hideLoading();
+    }, 800);
+    return () => hideLoading();
+  }, [location]);
   
   const handleOpenUploadModal = async () => {
     const { data } = await supabase.auth.getUser();
@@ -40,42 +52,48 @@ const Index: React.FC = () => {
   return (
     <div className="min-h-screen pb-14 md:pb-0">
       <Navbar />
-      
-      {/* Hero Section */}
-      <div className="pt-16 md:pt-24">
-        <HeroSection onUploadClick={handleOpenUploadModal} />
-      </div>
-      
-      {/* Carousel Section - On mobile: between hero and products, On desktop: part of hero */}
-      {isMobile && (
-        <div className="px-4 pb-6">
-          <div className="container mx-auto">
-            <HeroCarousel />
+      <div className="container mx-auto relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+            <span className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></span>
           </div>
+        )}
+        {/* Hero Section */}
+        <div className="pt-16 md:pt-24">
+          <HeroSection onUploadClick={handleOpenUploadModal} />
         </div>
-      )}
-      
-      {/* Product Recommendation Section */}
-      <ProductRecommendations />
-      
-      {/* Features Section */}
-      <FeaturesSection />
-      
-      {/* CTA Section */}
-      <CtaSection />
-      
-      {/* Footer */}
-      <FooterSection />
-      
-      {/* Mobile Navigation Footer - will only render on mobile */}
-      <MobileNavFooter />
-      
-      {/* Upload Artwork Modal */}
-      <UploadArtwork 
-        isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)}
-        onSuccess={handleUploadSuccess}
-      />
+        
+        {/* Carousel Section - On mobile: between hero and products, On desktop: part of hero */}
+        {isMobile && (
+          <div className="px-4 pb-6">
+            <div className="container mx-auto">
+              <HeroCarousel />
+            </div>
+          </div>
+        )}
+        
+        {/* Product Recommendation Section */}
+        <ProductRecommendations />
+        
+        {/* Features Section */}
+        <FeaturesSection />
+        
+        {/* CTA Section */}
+        <CtaSection />
+        
+        {/* Footer */}
+        <FooterSection />
+        
+        {/* Mobile Navigation Footer - will only render on mobile */}
+        <MobileNavFooter />
+        
+        {/* Upload Artwork Modal */}
+        <UploadArtwork 
+          isOpen={isUploadModalOpen} 
+          onClose={() => setIsUploadModalOpen(false)}
+          onSuccess={handleUploadSuccess}
+        />
+      </div>
     </div>
   );
 };
