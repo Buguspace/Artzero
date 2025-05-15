@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
                   {/* 发现 Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center font-medium hover:text-artflow-blue transition-colors focus:outline-none">
-                      <span>发现</span>
+                      <span>探索</span>
                       <ChevronDown className="ml-1" size={16} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 bg-white">
